@@ -4,6 +4,7 @@ const cors = require('cors')
 const PORT = process.env.PORT || 3000
 const session = require('express-session')
 const routes = require('./routes/index.js')
+const swaggerDoc = require('./swagger/swaggerDoc')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -19,6 +20,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // use passport
@@ -31,6 +33,9 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
+
+// api doc
+swaggerDoc(app)
 
 // routes
 routes(app)
