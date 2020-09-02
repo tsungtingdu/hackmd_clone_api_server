@@ -3,6 +3,7 @@ const app = express()
 const router = express.Router()
 const postController = require('../controllers/apis/postController')
 const userController = require('../controllers/apis/userController')
+const collaboratorController = require('../controllers/apis/collaboratorController')
 
 // auth
 const passport = require('../config/passport')
@@ -17,5 +18,9 @@ router.delete('/post/:postId', authenticated, postController.deletePost)
 
 router.post('/user/signup', userController.signup)
 router.post('/user/signin', userController.signin)
+
+router.get('/collaborators/:postId', authenticated, collaboratorController.getCollaborators)
+router.post('/collaborator/:postId', authenticated, collaboratorController.addCollaborator)
+router.delete('/collaborator/:postId', authenticated, collaboratorController.deleteCollaborator)
 
 module.exports = router

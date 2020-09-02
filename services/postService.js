@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Post } = db
+const { Collaborator, Post } = db
 
 const postService = {
   getPosts: async (req, res, callback) => {
@@ -73,6 +73,13 @@ const postService = {
         content: req.body.content,
         status: req.body.status || 'private'
       })
+
+      await Collaborator.create({
+        PostId: newPost.id,
+        UserId: req.user.id,
+        role: 'owber'
+      })
+
       return callback({
         status: 200,
         message: "success",

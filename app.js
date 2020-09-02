@@ -26,7 +26,6 @@ const passport = require('./config/passport')
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 // locals
 app.use((req, res, next) => {
   res.locals.user = req.user
