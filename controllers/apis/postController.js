@@ -12,8 +12,23 @@ const postController = {
       return res.status(data.status).json(data)
     })
   },
+  viewPost: (req, res) => {
+    postService.viewPost(req, res, data => {
+      return res.status(data.status).json(data)
+    })
+  },
   createPost: (req, res) => {
     postService.createPost(req, res, data => {
+      return res.status(data.status).json(data)
+    })
+  },
+  updatePost: (req, res) => {
+    postService.updatePost(req, res, data => {
+      return res.status(data.status).json(data)
+    })
+  },
+  deletePost: (req, res) => {
+    postService.deletePost(req, res, data => {
       return res.status(data.status).json(data)
     })
   }
