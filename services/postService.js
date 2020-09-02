@@ -77,7 +77,7 @@ const postService = {
       await Collaborator.create({
         PostId: newPost.id,
         UserId: req.user.id,
-        role: 'owber'
+        role: 'owner'
       })
 
       return callback({
