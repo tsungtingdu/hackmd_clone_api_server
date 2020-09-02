@@ -5,6 +5,10 @@ const PORT = process.env.PORT || 3000
 const session = require('express-session')
 const routes = require('./routes/index.js')
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 // cors
 app.use(cors())
 
@@ -16,6 +20,12 @@ app.use(session({
 }))
 
 app.use(express.json())
+
+// use passport
+const passport = require('./config/passport')
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 // locals
 app.use((req, res, next) => {

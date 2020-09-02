@@ -71,7 +71,7 @@ const postService = {
       let newPost = await Post.create({
         title: req.body.title,
         content: req.body.content,
-        status: 'private'
+        status: req.body.status || 'private'
       })
       return callback({
         status: 200,
