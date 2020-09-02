@@ -2,7 +2,8 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 
 // config host
-let HOST = 'localhost:3000'
+let HOST = process.env.HOST || 'localhost:3000'
+HOST = HOST.replace('https://', "")
 
 const options = {
   swaggerDefinition: {
