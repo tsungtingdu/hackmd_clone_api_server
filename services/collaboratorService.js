@@ -101,6 +101,7 @@ const collaboratorService = {
         })
       }
 
+      await record.destroy()
       return callback({
         status: 200,
         message: 'Delete a collaborator successfully!',
