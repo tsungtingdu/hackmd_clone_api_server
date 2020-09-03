@@ -171,3 +171,37 @@
  *       401:
  *         description: unauthorized
  */
+
+/********************************************************************
+* Admin- get collaboration data of a post or user
+* POST /api/admin/collaborators
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/admin/collaborators:
+ *   post:
+ *     tags:
+ *      - Admin
+ *     description: get collaboration data of a post or user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: userId
+ *         description: userId
+ *         in: formData
+ *         type: string
+ *       - name: postId
+ *         description: postId
+ *         in: formData
+ *         type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: error
+ *       401:
+ *         description: unauthorized
+ */

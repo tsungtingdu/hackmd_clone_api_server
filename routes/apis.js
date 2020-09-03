@@ -6,6 +6,7 @@ const userController = require('../controllers/apis/userController')
 const collaboratorController = require('../controllers/apis/collaboratorController')
 const adminPostController = require('../controllers/apis/admin/postController')
 const adminUserController = require('../controllers/apis/admin/userController')
+const adminCollaboratorController = require('../controllers/apis/admin/collaboratorController')
 
 // auth
 const passport = require('../config/passport')
@@ -30,6 +31,9 @@ router.delete('/admin/post/:postId', authenticated, adminAuthenticated, adminPos
 router.get('/admin/users', authenticated, adminAuthenticated, adminUserController.getUsers)
 router.get('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.getUser)
 router.delete('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.deleteUser)
+
+router.post('/admin/collaborators', authenticated, adminAuthenticated, adminCollaboratorController.getData)
+
 
 // user
 router.get('/posts', authenticated, postController.getPosts)
