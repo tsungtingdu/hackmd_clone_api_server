@@ -43,6 +43,19 @@ const collaboratorService = {
     try {
       const { email, role } = req.body
 
+      // only allow owner, viewer, collaborator to see the info
+      let collaborator = await Collaborator.findOne({
+        where: { PostId: req.params.postId, UserId: req.user.id, role: 'owner' }
+      })
+
+      if (!collaborator) {
+        return callback({
+          status: 401,
+          message: 'Unauthorized',
+          data: null
+        })
+      }
+
       // missing field
       if (!email || !role) {
         return callback({
@@ -62,17 +75,45 @@ const collaboratorService = {
         })
       }
 
-      // add a new collaborator
-      let newCollaborator = await Collaborator.create({
-        PostId: req.params.postId,
-        UserId: user.id,
-        role: role
+      // check if exist
+      let newCollaborator = await Collaborator.findOne({
+        where: {
+          PostId: req.params.postId,
+          UserId: user.id,
+        }
       })
+      let message = ''
+
+      if (newCollaborator) {
+        // if exist, update
+        await newCollaborator.update({
+          PostId: req.params.postId,
+          UserId: user.id,
+          role: role
+        })
+        message = 'Update collaborator successfully!'
+      } else {
+        // if not, create new
+        newCollaborator = await Collaborator.create({
+          PostId: req.params.postId,
+          UserId: user.id,
+          role: role
+        })
+        message = 'Add new collaborator successfully!'
+      }
+
+      // return 
       if (newCollaborator) {
         return callback({
           status: 200,
-          message: 'Add new collaborator successfully!',
+          message: message,
           data: newCollaborator
+        })
+      } else {
+        return callback({
+          status: 400,
+          message: err,
+          data: null
         })
       }
 
