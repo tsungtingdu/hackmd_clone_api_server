@@ -5,11 +5,25 @@ const collaboratorService = {
 
   getCollaborators: async (req, res, callback) => {
     try {
-      console.log(req.params.postId)
+
+      // only allow owner, viewer, collaborator to see the info
+      let collaborator = await Collaborator.findOne({
+        where: { PostId: req.params.postId, UserId: req.user.id }
+      })
+
+      if (!collaborator) {
+        return callback({
+          status: 401,
+          message: 'Unauthorized',
+          data: null
+        })
+      }
+
+      // retrieve data
       let collaborators = await Collaborator.findAll({
         where: { PostId: req.params.postId }
       })
-      console.log(collaborators)
+
       return callback({
         status: 200,
         message: 'success',
