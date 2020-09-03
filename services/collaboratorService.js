@@ -130,9 +130,24 @@ const collaboratorService = {
     try {
       const { email } = req.body
 
+      // only allow owner, viewer, collaborator to see the info
+      let collaborator = await Collaborator.findOne({
+        where: { PostId: req.params.postId, UserId: req.user.id, role: 'owner' }
+      })
+
+      if (!collaborator) {
+        return callback({
+          status: 401,
+          message: 'Unauthorized',
+          data: null
+        })
+      }
+
       // user does not exist
       let user = await User.findOne({ where: { email: email } })
-      if (!user) {
+      let record = await Collaborator.findOne({ where: { PostId: req.params.postId, UserId: user.id } })
+
+      if (!user || !record) {
         return callback({
           status: 400,
           message: 'Please enter valid user.',
@@ -141,13 +156,6 @@ const collaboratorService = {
       }
 
       // delete a collaborator
-      let record = await Collaborator.findOne({
-        where: {
-          PostId: req.params.postId,
-          UserId: user.id,
-        }
-      })
-
       if (record.UserId === req.user.id) {
         return callback({
           status: 400,
