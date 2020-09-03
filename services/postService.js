@@ -1,5 +1,6 @@
 const db = require('../models')
 const { Collaborator, Post } = db
+const { Op } = require("sequelize")
 
 const postService = {
   getPosts: async (req, res, callback) => {
@@ -24,7 +25,7 @@ const postService = {
   },
   getPost: async (req, res, callback) => {
     try {
-      let post = await Collaborator.findAll({
+      let post = await Collaborator.findOne({
         where: { UserId: req.user.id, PostId: req.params.postId },
         include: Post
       })
@@ -100,8 +101,22 @@ const postService = {
   },
   updatePost: async (req, res, callback) => {
     try {
+      // only allow owner and collaborator to edit post
+      let record = await Collaborator.findOne({
+        where: { UserId: req.user.id, PostId: req.params.postId, role: { [Op.or]: ['owner', 'collaborator'], } },
+        include: Post
+      })
+      if (!record) {
+        return callback({
+          status: 401,
+          message: "Unauthorized",
+          data: null
+        })
+      }
+
+      // update post
       let post = await Post.findOne({
-        where: { id: req.params.postId }
+        where: { id: record.Post.id }
       })
       post = await post.update({
         title: req.body.title,
