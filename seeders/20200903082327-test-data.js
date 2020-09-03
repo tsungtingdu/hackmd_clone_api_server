@@ -4,6 +4,14 @@ const db = require('../models')
 const { Collaborator, Post, User } = db
 const SEED_USER = [
   {
+    name: 'root',
+    email: 'admin@gmail.com',
+    password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
+    role: 'admin',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
     name: 'user1',
     email: 'user1@gmail.com',
     password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
@@ -50,7 +58,7 @@ module.exports = {
 
     // get user id
     let users = await User.findAll()
-    users = users.map(i => i.id)
+    users = users.filter(i => i.role === 'user').map(i => i.id)
     // get post id
     let posts = await Post.findAll()
     posts = posts.map(i => i.id)
