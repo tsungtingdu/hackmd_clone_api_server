@@ -24,8 +24,10 @@ const postService = {
   },
   getPost: async (req, res, callback) => {
     try {
-      let post = await Post.findOne(
-        { where: { id: req.params.postId } })
+      let post = await Collaborator.findAll({
+        where: { UserId: req.user.id, PostId: req.params.postId },
+        include: Post
+      })
       return callback({
         status: 200,
         message: "success",
