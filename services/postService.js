@@ -4,7 +4,10 @@ const { Collaborator, Post } = db
 const postService = {
   getPosts: async (req, res, callback) => {
     try {
-      let posts = await Post.findAll()
+      let posts = await Collaborator.findAll({
+        where: { UserId: req.user.id },
+        include: Post
+      })
       return callback({
         status: 200,
         message: "success",
