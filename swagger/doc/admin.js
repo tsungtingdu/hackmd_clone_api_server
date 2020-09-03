@@ -34,7 +34,7 @@
  *   get:
  *     tags:
  *      - Admin
- *     description: view public post
+ *     description: view a post
  *     produces:
  *       - application/json
  *     parameters:
@@ -74,6 +74,93 @@
  *         type: integer
  *         required: true
  *         description: postId
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: error
+ *       401:
+ *         description: unauthorized
+ */
+
+/********************************************************************
+* Admin - get all users
+* GET /api/admin/users
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/admin/users:
+ *   get:
+ *     tags:
+ *      - Admin
+ *     description: get all users
+ *     produces:
+ *       - application/json
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: error
+ *       401:
+ *         description: unauthorized
+ */
+
+/********************************************************************
+* Admin - get a user
+* GET /api/admin/user/:userId
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   get:
+ *     tags:
+ *      - Admin
+ *     description: view a user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         type: integer
+ *         required: true
+ *         description: userId
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: error
+ *       401:
+ *         description: unauthorized
+ */
+
+/********************************************************************
+* Post - delete a user
+* DELETE /api/admin/user/:userId
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   delete:
+ *     tags:
+ *      - Admin
+ *     description: delete a user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         type: integer
+ *         required: true
+ *         description: userId
  *     security:
  *       - bearerAuth: []
  *     responses:
