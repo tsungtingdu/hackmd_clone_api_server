@@ -4,11 +4,29 @@ const router = express.Router()
 const postController = require('../controllers/apis/postController')
 const userController = require('../controllers/apis/userController')
 const collaboratorController = require('../controllers/apis/collaboratorController')
+const adminPostController = require('../controllers/apis/admin/postController')
 
 // auth
 const passport = require('../config/passport')
 const authenticated = passport.authenticate('jwt', { session: false })
 
+const adminAuthenticated = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next()
+  } else {
+    return res.status(401).json({
+      status: 401,
+      message: 'Unauthorizsed'
+    })
+  }
+}
+
+// admin
+router.get('/admin/posts', authenticated, adminAuthenticated, adminPostController.getPosts)
+router.get('/admin/post/:postId', authenticated, adminAuthenticated, adminPostController.getPost)
+router.delete('/admin/post/:postId', authenticated, adminAuthenticated, adminPostController.deletePost)
+
+// user
 router.get('/posts', authenticated, postController.getPosts)
 router.get('/post/:postId/view', postController.viewPost)
 router.get('/post/:postId', authenticated, postController.getPost)
