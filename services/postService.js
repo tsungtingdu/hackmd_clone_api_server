@@ -139,9 +139,25 @@ const postService = {
   },
   deletePost: async (req, res, callback) => {
     try {
-      let post = await Post.findOne({ where: { id: req.params.postId } })
+      // only allow owner to delete the post
+      let record = await Collaborator.findOne({
+        where: { UserId: req.user.id, PostId: req.params.postId, role: 'owner' },
+        include: Post
+      })
+      if (!record) {
+        return callback({
+          status: 401,
+          message: "Unauthorized",
+          data: null
+        })
+      }
 
+      // delete post
+      let post = await Post.findOne({
+        where: { id: record.Post.id }
+      })
       await post.destroy()
+
       return callback({
         status: 200,
         message: "success",
