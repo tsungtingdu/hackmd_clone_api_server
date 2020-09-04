@@ -8,10 +8,10 @@ Roles:
 * user: people who signed in
 * (visitor: people who did not sign in)
 
-Ａccess right of a post:
-* Owner: user who created the post
-* Collaborator: user who can update a post
-* Viewer: user who can see a private post
+Access right of a post:
+* Owner: user who created the post, can update and delete a post
+* Collaborator: user who can update a post that created by other user
+* Viewer: user who can see a private post that created by other user
 
 Endpoint:
 * https://hackmd-clone.herokuapp.com
@@ -48,8 +48,8 @@ Please refer to online API doc for more details:
 | DELETE  | /api/admin//collaborator/:id | admin can delete a collaborator record |
 ***
 
-## Test data
-| Role  | name  | email  |  password  |   |
+## Test user
+| role  | name  | email  |  password  |   |
 |---|---|---|---|---|
 | admin | admin | admin@gmail.com | 12345678 |
 | user | user1 | user1@gmail.com | 12345678 |
