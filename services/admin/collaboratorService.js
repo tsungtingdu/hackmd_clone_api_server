@@ -3,19 +3,13 @@ const { Collaborator, User, Post } = db
 const { Op } = require("sequelize")
 
 const collaboratorService = {
-  getData: async (req, res, callback) => {
+  getCollaborators: async (req, res, callback) => {
     try {
-      const { userId, postId } = req.body
-      let posts = await Collaborator.findAll({
-        where: {
-          [Op.or]: [{ UserId: userId ? userId : null, }, { PostId: postId ? postId : null }]
-        },
-        include: [User, Post]
-      })
+      let collaborators = await Collaborator.findAll()
       return callback({
         status: 200,
         message: 'success',
-        data: posts
+        data: collaborators
       })
     } catch (err) {
       return callback({

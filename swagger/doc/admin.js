@@ -173,28 +173,19 @@
  */
 
 /********************************************************************
-* Admin- get collaboration data of a post or user
-* POST /api/admin/collaborators
+* Admin- get collaborators data
+* GET /api/admin/collaborators
 ********************************************************************/
 
 /**
  * @swagger
  * /api/admin/collaborators:
- *   post:
+ *   get:
  *     tags:
  *      - Admin
- *     description: get collaboration data of a post or user
+ *     description: get collaborators data
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: userId
- *         description: userId
- *         in: formData
- *         type: string
- *       - name: postId
- *         description: postId
- *         in: formData
- *         type: string
  *     security:
  *       - bearerAuth: []
  *     responses:

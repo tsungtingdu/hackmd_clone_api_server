@@ -32,7 +32,7 @@ router.get('/admin/users', authenticated, adminAuthenticated, adminUserControlle
 router.get('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.getUser)
 router.delete('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.deleteUser)
 
-router.post('/admin/collaborators', authenticated, adminAuthenticated, adminCollaboratorController.getData)
+router.get('/admin/collaborators', authenticated, adminAuthenticated, adminCollaboratorController.getCollaborators)
 
 
 // user
