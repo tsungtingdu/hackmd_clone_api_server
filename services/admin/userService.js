@@ -42,6 +42,18 @@ const userService = {
       let user = await User.findOne({
         where: { id: req.params.userId }
       })
+
+      // admin can only update his/her own name but not role
+      if (user.id === req.user.id) {
+        user = await user.update({ name: name })
+        return callback({
+          status: 400,
+          message: 'Update a user successfully',
+          data: null
+        })
+      }
+
+      // admin can update other user's name and role
       user = await user.update({ name: name, role: role })
       return callback({
         status: 200,
@@ -78,7 +90,7 @@ const userService = {
         })
       }
 
-      user.destroy()
+      await user.destroy()
       await Collaborator.destroy({
         where: { UserId: req.params.userId }
       })
