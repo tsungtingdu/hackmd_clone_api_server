@@ -30,6 +30,7 @@ router.delete('/admin/post/:postId', authenticated, adminAuthenticated, adminPos
 
 router.get('/admin/users', authenticated, adminAuthenticated, adminUserController.getUsers)
 router.get('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.getUser)
+router.put('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.putUser)
 router.delete('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.deleteUser)
 
 router.get('/admin/collaborators', authenticated, adminAuthenticated, adminCollaboratorController.getCollaborators)

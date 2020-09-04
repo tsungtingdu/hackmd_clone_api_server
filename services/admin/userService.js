@@ -36,6 +36,26 @@ const userService = {
       })
     }
   },
+  putUser: async (req, res, callback) => {
+    try {
+      const { name, role } = req.body
+      let user = await User.findOne({
+        where: { id: req.params.userId }
+      })
+      user = await user.update({ name: name, role: role })
+      return callback({
+        status: 200,
+        message: 'Update a user successfully',
+        data: user
+      })
+    } catch (err) {
+      return callback({
+        status: 400,
+        message: err,
+        data: null
+      })
+    }
+  },
   deleteUser: async (req, res, callback) => {
     try {
       let user = await User.findOne({

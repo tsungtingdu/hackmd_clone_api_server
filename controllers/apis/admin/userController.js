@@ -11,6 +11,11 @@ const adminUserController = {
       return res.status(data.status).json(data)
     })
   },
+  putUser: (req, res) => {
+    userService.putUser(req, res, data => {
+      return res.status(data.status).json(data)
+    })
+  },
   deleteUser: (req, res) => {
     userService.deleteUser(req, res, data => {
       return res.status(data.status).json(data)

@@ -141,8 +141,49 @@
  *         description: unauthorized
  */
 
+
 /********************************************************************
-* Post - delete a user
+* Admin - update a user record
+* PUT /api/admin/user/:userId
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   put:
+ *     tags:
+ *      - Admin
+ *     description: update a user record
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         type: integer
+ *         required: true
+ *         description: userId
+ *       - name: name
+ *         description: name
+ *         in: formData
+ *         type: string
+ *       - name: role
+ *         description: role
+ *         in: formData
+ *         enum: ["user", "admin"]
+ *         type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: error
+ *       401:
+ *         description: unauthorized
+ */
+
+/********************************************************************
+* Delete - delete a user
 * DELETE /api/admin/user/:userId
 ********************************************************************/
 
