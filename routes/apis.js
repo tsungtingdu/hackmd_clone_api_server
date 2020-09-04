@@ -33,6 +33,8 @@ router.get('/admin/user/:userId', authenticated, adminAuthenticated, adminUserCo
 router.delete('/admin/user/:userId', authenticated, adminAuthenticated, adminUserController.deleteUser)
 
 router.get('/admin/collaborators', authenticated, adminAuthenticated, adminCollaboratorController.getCollaborators)
+router.put('/admin/collaborator/:id', authenticated, adminAuthenticated, adminCollaboratorController.putCollaborator)
+router.delete('/admin/collaborator/:id', authenticated, adminAuthenticated, adminCollaboratorController.deleteCollaborator)
 
 
 // user
