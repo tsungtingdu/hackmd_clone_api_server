@@ -41,7 +41,7 @@
  *   post:
  *     tags:
  *      - User
- *     description: Signup as api user
+ *     description: Signup as user
  *     produces:
  *       - application/json
  *     parameters:

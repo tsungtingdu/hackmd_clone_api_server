@@ -9,7 +9,7 @@
  *   get:
  *     tags:
  *      - Post
- *     description: get all posts
+ *     description: get all posts that user participated in (as owner, viewer, or collaborator)
  *     produces:
  *       - application/json
  *     security:
@@ -25,7 +25,7 @@
 
 
 /********************************************************************
-* Post - view public post
+* Post - visitor can view a public post
 * GET /api/post/:postId/view
 ********************************************************************/
 
@@ -35,7 +35,7 @@
  *   get:
  *     tags:
  *      - Post
- *     description: view public post
+ *     description: visitor can view a public post
  *     produces:
  *       - application/json
  *     parameters:
@@ -56,7 +56,7 @@
  */
 
 /********************************************************************
-* Post - get a post
+* Post -get a post
 * GET /api/post/:postId
 ********************************************************************/
 
@@ -66,7 +66,7 @@
  *   get:
  *     tags:
  *      - Post
- *     description: view public post
+ *     description: get a post if user is owner, viewer, or collaborator
  *     produces:
  *       - application/json
  *     parameters:
@@ -97,7 +97,7 @@
  *   post:
  *     tags:
  *      - Post
- *     description: create a new post
+ *     description: create a new post, and the user will be the owner of this post
  *     produces:
  *       - application/json
  *     parameters:
@@ -112,7 +112,7 @@
  *         required: true
  *         type: string
  *       - name: status
- *         description: status
+ *         description: status, default value is private
  *         in: formData
  *         enum: ["private", "public"]
  *         type: string
@@ -138,7 +138,7 @@
  *   put:
  *     tags:
  *      - Post
- *     description: update a post
+ *     description: user (owner or collaborator of the post) can update a post
  *     produces:
  *       - application/json
  *     parameters:
@@ -182,7 +182,7 @@
  *   delete:
  *     tags:
  *      - Post
- *     description: delete a post
+ *     description: delete a post, only owner of the post can delete it.
  *     produces:
  *       - application/json
  *     parameters:

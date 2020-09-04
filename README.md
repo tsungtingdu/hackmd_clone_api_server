@@ -5,30 +5,56 @@ This is a api server of my **HackMD Clone** project.
 ## APIs
 Roles:
 * admin
-* member: people who signed in
-* user: people who did not sign in 
+* user: people who signed in
+* (visitor: people who did not sign in)
+
+Ａccess right of a post:
+* Owner: user who created the post
+* Collaborator: user who can update a post
+* Viewer: user who can see a private post
 
 Endpoint:
 * https://hackmd-clone.herokuapp.com
 
-| Method  | Route  |  Description |
-|---|---|---|
-| POST  | /api/user/signup  | user can create account with email  |
-| POST  | /api/user/signin  | user can sign in with email as member  |
-| GET  | /api/posts  | member can see his/her own posts  |
-| GET  | /api/post/:postId  | member can see a post  |
-| GET  | /api/post/:postId/view  | user can see a public post  |
-| POST  | /api/post/:postId  | member can create a new post |
-| PUT  | /api/post/:postId  | member can update a post  |
-| DELETE  | /api/post/:postId  | member can delete a post  |
-| GET  | /api/collaborators/:postId  | member can see all collaborators of a post  |
-| POST  | /api/collaborator/:postId  | member can add a new member as collaborator |
-| DELETE  | /api/collaborator/:postId  | member can remove a new member as collaborator  |
-
-Online API doc
+Please refer to online API doc for more details:
 * https://hackmd-clone.herokuapp.com/api-doc/#/
 
+***
 ![](https://i.imgur.com/ki2ktnU.png)
+***
+| Method  | Route  |  Description |
+|---|---|---|
+| POST  | /api/user/signup  | visitor can create account with email  |
+| POST  | /api/user/signin  | visitor can sign in with email as member  |
+| GET  | /api/posts  | user can see his/her own posts  |
+| GET  | /api/post/:postId  | user (owner, viewer, collaborator) can see a post  |
+| GET  | /api/post/:postId/view  | visitor can see a public post  |
+| POST  | /api/post/:postId  | user can create a new post |
+| PUT  | /api/post/:postId  | user (owner and collaborator) can update a post  |
+| DELETE  | /api/post/:postId  | user can delete his/her own post  |
+| GET  | /api/collaborators/:postId  | user (owner, viewer, collaborator) can see all collaborators of a post  |
+| POST  | /api/collaborator/:postId  | user (owner) can add a new user as collaborator of a post |
+| DELETE  | /api/collaborator/:postId  | user (owner) can remove a collaborator of a post |
+|---|---|---|
+| GET  | /api/admin/posts  | admin can see all posts  |
+| GET  | /api/admin/post/:postId  | admin can see a post  |
+| DELETE | /api/admin/post/:postId   | admin can delete a post  |
+| GET  | /api/admin/users  | admin can see all users  |
+| GET  | /api/admin/user/:userId  | admin can see a user|
+| PUT  | /api/admin/user/:userId | admin can update a user (name and role) |
+| DELETE  | /api/admin/user/:userId | admin can delete a user |
+| GET  | /api/admin/collaborators  | admin can see all collaborators|
+| PUT  | /api/admin//collaborator/:id | admin can update a collaborator record |
+| DELETE  | /api/admin//collaborator/:id | admin can delete a collaborator record |
+***
+
+## Test data
+| Role  | name  | email  |  password  |   |
+|---|---|---|---|---|
+| admin | admin | admin@gmail.com | 12345678 |
+| user | user1 | user1@gmail.com | 12345678 |
+| user | user2 | user2@gmail.com | 12345678 |
+| user | user3 | user3@gmail.com | 12345678 |
 
 ***
 ## Install
@@ -56,7 +82,11 @@ DROP DATABASE IF EXISTS hackmd_clone_dev;
 CREATE DATABASE hackmd_clone_dev;
 USE hackmd_clone_dev;
 ```
-6. start app
+6. Insert seed data
+```
+$ npx sequelize db:seed:all
+```
+7. start app
 ```
 $ npm run dev
 ```

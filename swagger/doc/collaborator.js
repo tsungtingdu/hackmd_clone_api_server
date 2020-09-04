@@ -9,7 +9,7 @@
  *   get:
  *     tags:
  *      - Collaborator
- *     description: get all collaborators of a post
+ *     description: get all collaborators of a post, only a owner, viewer, collaborators of a post can retrieve data
  *     produces:
  *       - application/json
  *     parameters:
@@ -40,7 +40,7 @@
  *   post:
  *     tags:
  *      - Collaborator
- *     description: add a new collaborator to a post
+ *     description: add a new collaborator to a post, only a owner can remove
  *     produces:
  *       - application/json
  *     parameters:
@@ -80,7 +80,7 @@
  *   delete:
  *     tags:
  *      - Collaborator
- *     description: remove a collaborator from a post
+ *     description: remove a collaborator from a post, only a owner can remove
  *     produces:
  *       - application/json
  *     parameters:
