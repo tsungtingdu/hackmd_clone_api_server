@@ -6,9 +6,9 @@ const session = require('express-session')
 const routes = require('./routes/index.js')
 const swaggerDoc = require('./swagger/swaggerDoc')
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config()
+// }
 
 // cors
 app.use(cors())
