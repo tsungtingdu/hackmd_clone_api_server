@@ -2,6 +2,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { Collaborator, Post, User } = db
+const faker = require('faker')
+
 const SEED_USER = [
   {
     name: 'root',
@@ -48,8 +50,8 @@ module.exports = {
     await queryInterface.bulkInsert('Posts',
       Array.from({ length: 50 }).map((item, index) => {
         return {
-          title: `${index}-post`,
-          content: `${index}-Lorem lorem lorem`,
+          title: `${faker.lorem.words(3)}`,
+          content: `${faker.lorem.sentences()}`,
           status: 'private',
           createdAt: date,
           updatedAt: date
