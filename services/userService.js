@@ -99,7 +99,7 @@ const userService = {
       }
 
       let payload = { id: user.id }
-      let token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 60 * 30 })
+      let token = jwt.sign(payload, process.env.JWT_SECRET)
 
       return callback({
         status: 200,
