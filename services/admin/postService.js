@@ -41,7 +41,14 @@ const postService = {
       let post = await Post.findOne({
         where: { id: req.params.postId }
       })
+
+      // delete post
       await post.destroy()
+
+      // delete collaboratiob records
+      await Collaborator.destroy({
+        where: { PostId: record.Post.id }
+      })
       return callback({
         status: 200,
         message: 'delete a post successfully',

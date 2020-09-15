@@ -156,6 +156,11 @@ const postService = {
       let post = await Post.findOne({
         where: { id: record.Post.id }
       })
+
+      await Collaborator.destroy({
+        where: { PostId: record.Post.id }
+      })
+
       await post.destroy()
 
       return callback({
