@@ -26,6 +26,7 @@ Please refer to online API doc for more details:
 |---|---|---|
 | POST  | /api/user/signup  | visitor can create account with email  |
 | POST  | /api/user/signin  | visitor can sign in with email as member  |
+| GET  | /api/user  | user can get his/her own user info  |
 | GET  | /api/posts  | user can see his/her own posts  |
 | GET  | /api/post/:postId  | user (owner, viewer, collaborator) can see a post  |
 | GET  | /api/post/:postId/view  | visitor can see a public post  |

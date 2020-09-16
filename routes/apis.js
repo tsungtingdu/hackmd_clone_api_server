@@ -46,6 +46,7 @@ router.post('/post', authenticated, postController.createPost)
 router.put('/post/:postId', authenticated, postController.updatePost)
 router.delete('/post/:postId', authenticated, postController.deletePost)
 
+router.get('/user', authenticated, userController.getUser)
 router.post('/user/signup', userController.signup)
 router.post('/user/signin', userController.signin)
 

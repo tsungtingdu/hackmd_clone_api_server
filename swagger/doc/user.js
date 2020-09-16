@@ -1,6 +1,6 @@
 /********************************************************************
 * User - user signin
-* POST /api/users/signin
+* POST /api/user/signin
 ********************************************************************/
 
 /**
@@ -32,7 +32,7 @@
 
 /********************************************************************
 * User - user signup
-* POST /api/users/signup
+* POST /api/user/signup
 ********************************************************************/
 
 /**
@@ -65,6 +65,29 @@
  *         in: formData
  *         required: true
  *         type: string
+ *     responses:
+ *       200:
+ *         description: success
+ *       400:
+ *         description: signup fail
+ */
+
+ /********************************************************************
+* User - get user info
+* GET /api/user
+********************************************************************/
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     tags:
+ *      - User
+ *     description: Get user info
+ *     produces:
+ *       - application/json
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: success

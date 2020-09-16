@@ -3,6 +3,7 @@ const db = require('../models')
 const { User } = db
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+const { serializeUser } = require('passport')
 
 const userService = {
   signup: async (req, res, callback) => {
@@ -114,6 +115,32 @@ const userService = {
           }
         }
       })
+    } catch (err) {
+      return callback({
+        status: 400,
+        message: err,
+        data: null
+      })
+    }
+  },
+  getUser: async (req, res, callback) => {
+    try {
+      const user = await User.findOne({
+        where: { id: req.user.id }
+      })
+      return callback({
+        status: 200,
+        message: "Get user.",
+        data: {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+          }
+        }
+      })
+
     } catch (err) {
       return callback({
         status: 400,
