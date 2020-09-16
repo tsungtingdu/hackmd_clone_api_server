@@ -49,9 +49,10 @@ module.exports = {
     let date = new Date()
     await queryInterface.bulkInsert('Posts',
       Array.from({ length: 50 }).map((item, index) => {
+        let fakeTitle = faker.lorem.words(3)
         return {
-          title: `${faker.lorem.words(3)}`,
-          content: `${faker.lorem.sentences()}`,
+          title: fakeTitle,
+          content: `# ${fakeTitle} \n\ ${faker.lorem.sentences()}`,
           status: 'private',
           createdAt: date,
           updatedAt: date
