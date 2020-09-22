@@ -33,10 +33,13 @@ module.exports = socketService = (server) => {
     // emit first data from database
     io.in(room).emit("post", { room: room, msg: message });
 
-    // listenging on socket message
+    // listening on socket message
     socket.on("post", (room, msg) => {
       // broadcast
-      io.in(room).emit("post", { room: room, msg: msg });
+      const curRoom = io.sockets.adapter.rooms[room];
+      let numOfUsers = curRoom.length;
+      io.in(room).emit("post", { room: room, msg: msg, numOfUser: numOfUsers });
+
       // auto saving
       autoSave(msg);
     });
