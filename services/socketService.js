@@ -34,11 +34,12 @@ module.exports = socketService = (server) => {
     });
 
     // auto save data
-    const autoSave = _.debounce(async (msg) => {
-      let post = await Post.findOne({ where: { id: room } });
-      await post.update({
-        title: getTitle(msg),
-        content: msg,
+    const autoSave = _.debounce((msg) => {
+      Post.findOne({ where: { id: room } }).then((post) => {
+        post.update({
+          title: getTitle(msg),
+          content: msg,
+        });
       });
     }, 2000);
 
@@ -50,7 +51,7 @@ module.exports = socketService = (server) => {
       io.in(room).emit("post", { room: room, msg: msg, numOfUser: numOfUsers });
 
       // auto saving
-      autoSave(msg);
+      // autoSave(msg);
     });
 
     // disconnect socket
