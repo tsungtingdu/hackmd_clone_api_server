@@ -40,7 +40,7 @@ module.exports = socketService = (server) => {
         title: getTitle(msg),
         content: msg,
       });
-    }, 1000);
+    }, 2000);
 
     // listening on socket message
     socket.on("post", (room, msg) => {
