@@ -22,7 +22,6 @@ module.exports = socketService = (server) => {
         message = post.content;
 
         // emit first data from database
-        console.log("emit data:", message.length);
         io.in(room).emit("post", { room: room, msg: message });
       }
     };
@@ -45,7 +44,6 @@ module.exports = socketService = (server) => {
 
     // listening on socket message
     socket.on("post", (room, msg) => {
-      console.log("msg:", msg);
       // broadcast
       const curRoom = io.sockets.adapter.rooms[room];
       let numOfUsers = curRoom ? curRoom.length : 1;
