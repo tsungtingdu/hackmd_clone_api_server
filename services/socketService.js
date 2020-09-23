@@ -41,7 +41,7 @@ module.exports = socketService = (server) => {
           content: msg,
         });
       });
-    }, 2000);
+    }, 1500);
 
     // listening on socket message
     socket.on("post", (room, msg) => {
@@ -51,7 +51,7 @@ module.exports = socketService = (server) => {
       io.in(room).emit("post", { room: room, msg: msg, numOfUser: numOfUsers });
 
       // auto saving
-      // autoSave(msg);
+      autoSave(msg);
     });
 
     // disconnect socket
