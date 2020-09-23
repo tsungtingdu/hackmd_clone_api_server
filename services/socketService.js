@@ -7,16 +7,32 @@ module.exports = socketService = (server) => {
   // create socket
   const socketIo = require("socket.io");
   const io = socketIo(server);
+  let room;
+  let post;
+  let message;
 
   io.on("connection", async (socket) => {
-    // create a room
-    let url = socket.request.headers.referer;
-    url = url.split("/post/");
-    const room = Number(url[url.length - 1]);
+    // retrieve data from database
+    const setData = async () => {
+      let postId = Number(room);
+      if (!isNaN(postId)) {
+        post = await Post.findOne({
+          where: { id: postId },
+        });
+        message = post.content;
 
-    // retrieve data
-    let post = await Post.findOne({ where: { id: room } });
-    let message = post.content;
+        // emit first data from database
+        console.log("emit data:", message.length);
+        io.in(room).emit("post", { room: room, msg: message });
+      }
+    };
+
+    // join a room
+    socket.on("join", async (next) => {
+      socket.join(next);
+      room = next;
+      await setData();
+    });
 
     // auto save data
     const autoSave = _.debounce(async (msg) => {
@@ -27,17 +43,12 @@ module.exports = socketService = (server) => {
       });
     }, 1000);
 
-    // join a room
-    socket.join(room);
-
-    // emit first data from database
-    io.in(room).emit("post", { room: room, msg: message });
-
     // listening on socket message
     socket.on("post", (room, msg) => {
+      console.log("msg:", msg);
       // broadcast
       const curRoom = io.sockets.adapter.rooms[room];
-      let numOfUsers = curRoom.length;
+      let numOfUsers = curRoom ? curRoom.length : 1;
       io.in(room).emit("post", { room: room, msg: msg, numOfUser: numOfUsers });
 
       // auto saving
