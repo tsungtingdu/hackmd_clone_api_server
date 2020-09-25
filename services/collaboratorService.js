@@ -1,78 +1,98 @@
-const db = require('../models')
-const { Collaborator, Post, User } = db
+const db = require("../models");
+const { Collaborator, Post, User } = db;
 
 const collaboratorService = {
-
   getCollaborators: async (req, res, callback) => {
     try {
-
       // only allow owner, viewer, collaborator to see the info
       let collaborator = await Collaborator.findOne({
-        where: { PostId: req.params.postId, UserId: req.user.id }
-      })
+        where: { PostId: req.params.postId, UserId: req.user.id },
+      });
 
       if (!collaborator) {
         return callback({
           status: 401,
-          message: 'Unauthorized',
-          data: null
-        })
+          message: "Unauthorized",
+          data: null,
+        });
       }
 
       // retrieve data
       let collaborators = await Collaborator.findAll({
-        where: { PostId: req.params.postId }
-      })
+        where: { PostId: req.params.postId },
+        include: User,
+      });
+
+      collaborators = collaborators.map((i) => {
+        let userEmail = i.dataValues.User.email;
+        delete i.dataValues.User;
+        return {
+          ...i.dataValues,
+          userEmail,
+        };
+      });
 
       return callback({
         status: 200,
-        message: 'success',
-        data: collaborators
-      })
+        message: "success",
+        data: collaborators,
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return callback({
         status: 400,
         message: err,
-        data: null
-      })
+        data: null,
+      });
     }
   },
 
   addCollaborator: async (req, res, callback) => {
     try {
-      const { email, role } = req.body
+      const { email, role } = req.body;
 
-      // only allow owner, viewer, collaborator to see the info
+      // only allow owner
       let collaborator = await Collaborator.findOne({
-        where: { PostId: req.params.postId, UserId: req.user.id, role: 'owner' }
-      })
+        where: {
+          PostId: req.params.postId,
+          UserId: req.user.id,
+          role: "owner",
+        },
+        include: User,
+      });
 
       if (!collaborator) {
         return callback({
           status: 401,
-          message: 'Unauthorized',
-          data: null
-        })
+          message: "Unauthorized",
+          data: null,
+        });
+      }
+      if (email === collaborator.User.email) {
+        return callback({
+          status: 400,
+          message: "Owner can't change his/her own collaboration status",
+          data: null,
+        });
       }
 
       // missing field
       if (!email || !role) {
         return callback({
           status: 400,
-          message: 'All fields are required.',
-          data: null
-        })
+          message: "All fields are required.",
+          data: null,
+        });
       }
 
       // user does not exist
-      let user = await User.findOne({ where: { email: email } })
+      let user = await User.findOne({ where: { email: email } });
       if (!user) {
         return callback({
           status: 400,
-          message: 'Please enter valid user.',
-          data: null
-        })
+          message: "Please enter valid user.",
+          data: null,
+        });
       }
 
       // check if exist
@@ -80,106 +100,106 @@ const collaboratorService = {
         where: {
           PostId: req.params.postId,
           UserId: user.id,
-        }
-      })
-      let message = ''
+        },
+      });
+      let message = "";
 
       if (newCollaborator) {
         // if exist, update
         await newCollaborator.update({
           PostId: req.params.postId,
           UserId: user.id,
-          role: role
-        })
-        message = 'Update collaborator successfully!'
+          role: role,
+        });
+        message = "Update collaborator successfully!";
       } else {
         // if not, create new
         newCollaborator = await Collaborator.create({
           PostId: req.params.postId,
           UserId: user.id,
-          role: role
-        })
-        message = 'Add new collaborator successfully!'
+          role: role,
+        });
+        message = "Add new collaborator successfully!";
       }
 
-      // return 
+      // return
       if (newCollaborator) {
         return callback({
           status: 200,
           message: message,
-          data: newCollaborator
-        })
+          data: newCollaborator,
+        });
       } else {
         return callback({
           status: 400,
           message: err,
-          data: null
-        })
+          data: null,
+        });
       }
-
     } catch (err) {
       return callback({
         status: 400,
         message: err,
-        data: null
-      })
+        data: null,
+      });
     }
   },
 
   deleteCollaborator: async (req, res, callback) => {
     try {
-      const { email } = req.body
-
+      const { email } = req.body;
       // only allow owner, viewer, collaborator to see the info
       let collaborator = await Collaborator.findOne({
-        where: { PostId: req.params.postId, UserId: req.user.id, role: 'owner' }
-      })
-
+        where: {
+          PostId: req.params.postId,
+          UserId: req.user.id,
+          role: "owner",
+        },
+      });
       if (!collaborator) {
         return callback({
           status: 401,
-          message: 'Unauthorized',
-          data: null
-        })
+          message: "Unauthorized",
+          data: null,
+        });
       }
 
       // user does not exist
-      let user = await User.findOne({ where: { email: email } })
-      let record = await Collaborator.findOne({ where: { PostId: req.params.postId, UserId: user.id } })
-
+      let user = await User.findOne({ where: { email: email } });
+      let record = await Collaborator.findOne({
+        where: { PostId: req.params.postId, UserId: user.id },
+      });
       if (!user || !record) {
         return callback({
           status: 400,
-          message: 'Please enter valid user.',
-          data: null
-        })
+          message: "Please enter valid user.",
+          data: null,
+        });
       }
 
       // delete a collaborator
       if (record.UserId === req.user.id) {
         return callback({
           status: 400,
-          message: 'You can not remove yourself',
-          data: null
-        })
+          message: "You can not remove yourself",
+          data: null,
+        });
       }
 
-      await record.destroy()
+      await record.destroy();
       return callback({
         status: 200,
-        message: 'Delete a collaborator successfully!',
-        data: null
-      })
-
-
+        message: "Delete a collaborator successfully!",
+        data: null,
+      });
     } catch (err) {
       return callback({
         status: 400,
         message: err,
-        data: null
-      })
+        data: null,
+      });
     }
-  }
-}
+  },
+};
 
-module.exports = collaboratorService
+module.exports = collaboratorService;

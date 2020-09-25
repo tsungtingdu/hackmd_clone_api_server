@@ -1,7 +1,7 @@
 /********************************************************************
-* Collaborator - get all collaborators of a post
-* GET /api/collaborators/:postId
-********************************************************************/
+ * Collaborator - get all collaborators of a post
+ * GET /api/collaborators/:postId
+ ********************************************************************/
 
 /**
  * @swagger
@@ -30,9 +30,9 @@
  */
 
 /********************************************************************
-* Collaborator - add a new collaborator to a post
-* POST /api/collaborator/:postId
-********************************************************************/
+ * Collaborator - add a new collaborator to a post
+ * POST /api/collaborator/:postId
+ ********************************************************************/
 
 /**
  * @swagger
@@ -70,14 +70,14 @@
  */
 
 /********************************************************************
-* Collaborator - remove a collaborator from a post
-* DELETE /api/collaborator/:postId
-********************************************************************/
+ * Collaborator - remove a collaborator from a post
+ * PUT /api/collaborator/:postId
+ ********************************************************************/
 
 /**
  * @swagger
  * /api/collaborator/{postId}:
- *   delete:
+ *  put:
  *     tags:
  *      - Collaborator
  *     description: remove a collaborator from a post, only a owner can remove
