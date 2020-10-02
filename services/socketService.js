@@ -2,6 +2,8 @@ const db = require("../models");
 const getTitle = require("../helpers/getTitle");
 const _ = require("lodash");
 const { Post } = db;
+const DiffMatchPatch = require("diff-match-patch");
+const dmp = new DiffMatchPatch();
 
 module.exports = socketService = (server) => {
   // create socket
@@ -33,13 +35,32 @@ module.exports = socketService = (server) => {
       await setData();
     });
 
-    const autoSave = async (msg) => {
-      let post = await Post.findOne({ where: { id: room } });
-      post = await post.update({
-        title: getTitle(msg),
-        content: msg,
-      });
-      return post.content;
+    // const autoSave = async (msg) => {
+    //   let post = await Post.findOne({ where: { id: room } });
+    //   post = await post.update({
+    //     title: getTitle(msg),
+    //     content: msg,
+    //   });
+    //   return post.content;
+    // };
+
+    const diffSync = async (msg) => {
+      if (room) {
+        // get previous version
+        let post = await Post.findOne({ where: { id: room } });
+        let prevContent = post.content;
+        // get patches
+        let patches = dmp.patch_make(prevContent, msg);
+        // apply patches
+        let newContent = dmp.patch_apply(patches, prevContent);
+        let updatedPost = await post.update({
+          title: getTitle(msg),
+          content: newContent[0],
+        });
+        return newContent[0];
+      } else {
+        return msg;
+      }
     };
 
     // listening on socket message
@@ -47,7 +68,7 @@ module.exports = socketService = (server) => {
       // broadcast
       const curRoom = io.sockets.adapter.rooms[room];
       let numOfUsers = curRoom ? curRoom.length : 1;
-      msg = await autoSave(msg);
+      msg = await diffSync(msg);
       io.in(room).emit("post", {
         room: room,
         msg: msg,
