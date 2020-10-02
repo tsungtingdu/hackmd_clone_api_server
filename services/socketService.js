@@ -33,25 +33,26 @@ module.exports = socketService = (server) => {
       await setData();
     });
 
-    // auto save data
-    const autoSave = _.debounce((msg) => {
-      Post.findOne({ where: { id: room } }).then((post) => {
-        post.update({
-          title: getTitle(msg),
-          content: msg,
-        });
+    const autoSave = async (msg) => {
+      let post = await Post.findOne({ where: { id: room } });
+      post = await post.update({
+        title: getTitle(msg),
+        content: msg,
       });
-    }, 1500);
+      return post.content;
+    };
 
     // listening on socket message
-    socket.on("post", (room, msg) => {
+    socket.on("post", async (room, msg) => {
       // broadcast
       const curRoom = io.sockets.adapter.rooms[room];
       let numOfUsers = curRoom ? curRoom.length : 1;
-      io.in(room).emit("post", { room: room, msg: msg, numOfUser: numOfUsers });
-
-      // auto saving
-      autoSave(msg);
+      msg = await autoSave(msg);
+      io.in(room).emit("post", {
+        room: room,
+        msg: msg,
+        numOfUser: numOfUsers,
+      });
     });
 
     // disconnect socket
