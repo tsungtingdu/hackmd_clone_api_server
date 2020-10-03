@@ -35,44 +35,30 @@ module.exports = socketService = (server) => {
       await setData();
     });
 
-    // const autoSave = async (msg) => {
-    //   let post = await Post.findOne({ where: { id: room } });
-    //   post = await post.update({
-    //     title: getTitle(msg),
-    //     content: msg,
-    //   });
-    //   return post.content;
-    // };
-
-    const diffSync = async (msg) => {
-      if (room) {
-        // get previous version
+    const updateDoc = async (room, diff) => {
+      const { patches } = diff;
+      if (patches) {
         let post = await Post.findOne({ where: { id: room } });
         let prevContent = post.content;
-        // get patches
-        let patches = dmp.patch_make(prevContent, msg);
-        // apply patches
         let newContent = dmp.patch_apply(patches, prevContent);
-        let updatedPost = await post.update({
-          title: getTitle(msg),
+        await post.update({
+          title: getTitle(newContent[0]),
           content: newContent[0],
         });
-        return newContent[0];
-      } else {
-        return msg;
       }
     };
 
     // listening on socket message
-    socket.on("post", async (room, msg) => {
+    socket.on("post", async (room, diff) => {
       // broadcast
       const curRoom = io.sockets.adapter.rooms[room];
       let numOfUsers = curRoom ? curRoom.length : 1;
-      msg = await diffSync(msg);
+      await updateDoc(room, diff);
       io.in(room).emit("post", {
         room: room,
-        msg: msg,
+        diff: diff,
         numOfUser: numOfUsers,
+        msg: null,
       });
     });
 
